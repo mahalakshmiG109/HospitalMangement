@@ -1,12 +1,18 @@
 import { useState } from 'react'
 import './App.css'
 import AboutPage from './AboutPage'
+import AuthPage from './AuthPage'
 
 function App() {
   const [showAbout, setShowAbout] = useState(false)
+  const [showAuth, setShowAuth] = useState(false)
 
   if (showAbout) {
     return <AboutPage onBackHome={() => setShowAbout(false)} />
+  }
+
+  if (showAuth) {
+    return <AuthPage onBackHome={() => setShowAuth(false)} />
   }
 
   return (
@@ -42,7 +48,9 @@ function App() {
             </button>
           </nav>
           <div className="nav-cta">
-            <a href="#" className="btn btn-ghost">Sign in</a>
+            <button type="button" className="btn btn-ghost" onClick={() => setShowAuth(true)}>
+              Sign in
+            </button>
             <a href="#cta" className="btn btn-primary">Request a demo</a>
           </div>
         </div>

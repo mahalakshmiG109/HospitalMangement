@@ -712,6 +712,159 @@ about-page {
   padding: 42px 36px;
 }
 
+auth-page {
+  display: block;
+}
+
+.auth-shell {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.auth-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 36px;
+  box-shadow: 0 20px 48px -28px rgba(15, 39, 48, 0.25);
+  max-width: 520px;
+  width: 100%;
+}
+
+.auth-header h1 {
+  font-family: 'Space Grotesk';
+  font-size: 28px;
+  margin-top: 18px;
+  margin-bottom: 10px;
+}
+
+.auth-header p {
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+.auth-form {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.auth-form label {
+  display: grid;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.auth-form input {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font: inherit;
+  background: #fff;
+}
+
+.auth-submit {
+  justify-content: center;
+  margin-top: 6px;
+}
+
+.status-message {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--teal-tint);
+  color: var(--teal-deep);
+  font-size: 14px;
+}
+
+.auth-toggle {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.auth-toggle button {
+  border: none;
+  background: none;
+  color: var(--teal-deep);
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
+  font-weight: 600;
+}
+
+.auth-back {
+  margin-top: 16px;
+}
+
+.profile-card {
+  max-width: 620px;
+}
+
+.profile-box {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+  padding: 18px;
+  border-radius: 16px;
+  background: var(--teal-tint);
+}
+
+.profile-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--teal-deep);
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.profile-role {
+  color: var(--ink-soft);
+  margin-top: 4px;
+}
+
+.profile-info {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.profile-info > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.profile-info strong {
+  color: var(--ink);
+}
+
+.profile-info span {
+  color: var(--ink-soft);
+  text-align: right;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
 footer {
   position: relative;
   z-index: 1;
