@@ -199,6 +199,21 @@ nav.links a:hover {
   color: var(--teal-deep);
 }
 
+.nav-link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--ink-soft);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.nav-link-btn:hover {
+  color: var(--teal-deep);
+}
+
 .nav-cta {
   display: flex;
   align-items: center;
@@ -630,6 +645,73 @@ section {
   margin-top: 30px;
 }
 
+about-page {
+  display: block;
+}
+
+.about-hero {
+  position: relative;
+  z-index: 1;
+  padding: 96px 0 40px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.65), transparent);
+}
+
+.about-hero h1 {
+  font-family: 'Space Grotesk';
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+  font-size: clamp(32px, 4.2vw, 52px);
+  max-width: 860px;
+  margin-top: 22px;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.about-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 30px;
+  box-shadow: 0 16px 40px -24px rgba(15, 39, 48, 0.25);
+}
+
+.about-card h2 {
+  font-family: 'Space Grotesk';
+  font-size: 22px;
+  margin-top: 10px;
+  margin-bottom: 12px;
+}
+
+.about-card p,
+.about-card li {
+  color: var(--ink-soft);
+  line-height: 1.7;
+  font-size: 15px;
+}
+
+.about-card ul {
+  padding-left: 18px;
+  display: grid;
+  gap: 8px;
+}
+
+.about-cta {
+  position: relative;
+  z-index: 1;
+  padding-top: 20px;
+}
+
+.about-band {
+  padding: 42px 36px;
+}
+
 footer {
   position: relative;
   z-index: 1;
@@ -669,6 +751,10 @@ footer {
 @media (max-width: 900px) {
   nav.links {
     display: none;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
   }
 
   .pillars,

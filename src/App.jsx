@@ -1,6 +1,14 @@
+import { useState } from 'react'
 import './App.css'
+import AboutPage from './AboutPage'
 
 function App() {
+  const [showAbout, setShowAbout] = useState(false)
+
+  if (showAbout) {
+    return <AboutPage onBackHome={() => setShowAbout(false)} />
+  }
+
   return (
     <div className="app-shell">
       <div className="bg-field">
@@ -29,6 +37,9 @@ function App() {
             <a href="#flow">How it works</a>
             <a href="#trust">Trusted by</a>
             <a href="#cta">Pricing</a>
+            <button type="button" className="nav-link-btn" onClick={() => setShowAbout(true)}>
+              About
+            </button>
           </nav>
           <div className="nav-cta">
             <a href="#" className="btn btn-ghost">Sign in</a>
