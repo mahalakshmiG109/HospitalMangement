@@ -15,6 +15,11 @@ function App() {
     return <AuthPage onBackHome={() => setShowAuth(false)} />
   }
 
+  const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+  const mapUrl = googleMapsApiKey
+    ? `https://www.google.com/maps/embed/v1/place?key=${googleMapsApiKey}&q=Andhra+Hospital,India&zoom=15`
+    : 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3804.536803487593!2d78.47320027463753!3d17.43777794144968!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb9770ef4b0a1d%3A0xa3a62b9fe40db96e!2sAndhra%20Hospital!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin'
+
   return (
     <div className="app-shell">
       <div className="bg-field">
@@ -32,12 +37,14 @@ function App() {
       <header>
         <div className="wrap nav-row">
           <div className="brand">
-            <div className="brand-mark">M+</div>
+            <div className="brand-mark">A+</div>
             <div>
-              <div className="brand-name">MediCare</div>
+              <div className="brand-name">Andhra Hospitals
+              </div>
               <div className="brand-sub">Management &amp; Diagnosis System</div>
             </div>
           </div>
+         
           <nav className="links">
             <a href="#pillars">Platform</a>
             <a href="#flow">How it works</a>
@@ -59,7 +66,7 @@ function App() {
       <main>
         <div className="hero wrap">
           <span className="eyebrow">
-            <span className="dot"></span> Live across 42 hospital floors right now
+             <div className="site-title">Andhra Hospitals</div>
           </span>
           <h1>
             HOSPITAL MANAGEMENT AND <span className="accent">DIAGNOSIS</span> SYSTEM
@@ -227,7 +234,15 @@ function App() {
             </div>
           </div>
         </section>
-
+<div className="footer-map">
+            <iframe
+              title="Andhra Hospital location"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3804.536803487593!2d78.47320027463753!3d17.43777794144968!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb9770ef4b0a1d%3A0xa3a62b9fe40db96e!2sAndhra%20Hospital!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
         <section id="cta">
           <div className="wrap cta-final">
             <h2>Bring your bed board, your intake sheets, and your diagnosis notes into one place.</h2>
@@ -248,13 +263,13 @@ function App() {
       </main>
 
       <footer>
-        <div className="wrap">
+        <div className="wrap footer-grid">
           <div className="foot-row">
             <div className="brand">
               <div className="brand-mark" style={{ width: '30px', height: '30px', fontSize: '13px' }}>
-                M+
+                A+
               </div>
-              <div className="brand-name">MediCare</div>
+              <div className="brand-name">Andhra Hospitals</div>
             </div>
             <div className="foot-links">
               <a href="#pillars">Platform</a>
@@ -263,6 +278,17 @@ function App() {
               <a href="#">Contact</a>
             </div>
           </div>
+
+          <div className="footer-map">
+            <iframe
+              title="Andhra Hospital location"
+              src={mapUrl}
+              allow center
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+
           <div className="foot-note">
             Advisory diagnosis support only — all clinical decisions are made and signed off by a
             licensed physician.
