@@ -73,7 +73,7 @@ function SymptomsChecker({ onBack, onSignOut }) {
                     onChange={(e) => setGender(e.target.value)}
                     required
                   />
-                  Male
+                  <span className="radio-label-text">Male</span>
                 </label>
                 <label className="radio-option">
                   <input
@@ -84,7 +84,7 @@ function SymptomsChecker({ onBack, onSignOut }) {
                     onChange={(e) => setGender(e.target.value)}
                     required
                   />
-                  Female
+                  <span className="radio-label-text">Female</span>
                 </label>
                 <label className="radio-option">
                   <input
@@ -95,7 +95,7 @@ function SymptomsChecker({ onBack, onSignOut }) {
                     onChange={(e) => setGender(e.target.value)}
                     required
                   />
-                  Other
+                  <span className="radio-label-text">Other</span>
                 </label>
               </fieldset>
             </div>

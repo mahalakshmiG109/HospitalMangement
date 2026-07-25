@@ -8,6 +8,7 @@ function AuthPage({ onBackHome }) {
   const [isSignUp, setIsSignUp] = useState(true)
   const [formData, setFormData] = useState({ username: '', password: '', confirmPassword: '' })
   const [message, setMessage] = useState('')
+  const [messageType, setMessageType] = useState('')
   const [loading, setLoading] = useState(false)
   const [loggedInUser, setLoggedInUser] = useState(null)
   const [showSymptoms, setShowSymptoms] = useState(false)
@@ -25,21 +26,25 @@ function AuthPage({ onBackHome }) {
 
     if (!username || !password) {
       setMessage('Please enter both a username and password.')
+      setMessageType('error')
       return
     }
 
     if (isSignUp && password !== formData.confirmPassword) {
       setMessage('Passwords do not match.')
+      setMessageType('error')
       return
     }
 
     if (!supabase) {
       setMessage('Supabase is not configured yet. Add your VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY values first.')
+      setMessageType('error')
       return
     }
 
     setLoading(true)
     setMessage('')
+    setMessageType('')
 
     try {
       if (isSignUp) {
@@ -52,6 +57,7 @@ function AuthPage({ onBackHome }) {
         if (selectError) throw selectError
         if (existingUser) {
           setMessage('That username already exists. Please choose another one.')
+          setMessageType('error')
           setLoading(false)
           return
         }
@@ -61,6 +67,7 @@ function AuthPage({ onBackHome }) {
         if (insertError) throw insertError
 
         setMessage('Account created successfully. You can now sign in.')
+        setMessageType('success')
         setFormData({ username: '', password: '', confirmPassword: '' })
         setIsSignUp(false)
       } else {
@@ -74,15 +81,18 @@ function AuthPage({ onBackHome }) {
         if (error) throw error
         if (!data) {
           setMessage('Invalid username or password.')
+          setMessageType('error')
           return
         }
 
         setLoggedInUser(data.username)
         setMessage(`Welcome back, ${data.username}!`)
+        setMessageType('success')
         setFormData({ username: '', password: '', confirmPassword: '' })
       }
     } catch (error) {
       setMessage(error.message || 'Something went wrong while saving your data.')
+      setMessageType('error')
     } finally {
       setLoading(false)
     }
@@ -159,7 +169,7 @@ function AuthPage({ onBackHome }) {
               </button>
             </form>
 
-          {message && <div className="status-message">{message}</div>}
+          {message && <div className={`status-message ${messageType}`}>{message}</div>}
 
           <div className="auth-toggle">
             {isSignUp ? (
