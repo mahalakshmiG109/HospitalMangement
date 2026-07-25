@@ -263,38 +263,46 @@ function App() {
       </main>
 
       <footer>
-        <div className="wrap footer-grid">
-          <div className="foot-row">
-            <div className="brand">
-              <div className="brand-mark" style={{ width: '30px', height: '30px', fontSize: '13px' }}>
-                A+
-              </div>
-              <div className="brand-name">Andhra Hospitals</div>
-            </div>
-            <div className="foot-links">
-              <a href="#pillars">Platform</a>
-              <a href="#flow">How it works</a>
-              <a href="#">Security</a>
-              <a href="#">Contact</a>
-            </div>
-          </div>
-
-          <div className="footer-map">
-            <iframe
-              title="Andhra Hospital location"
-              src={mapUrl}
-              allow center
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
-
-          <div className="foot-note">
-            Advisory diagnosis support only — all clinical decisions are made and signed off by a
-            licensed physician.
-          </div>
+  <div className="wrap footer-grid">
+    <div className="foot-row">
+      <div className="brand">
+        <div
+          className="brand-mark"
+          style={{ width: "30px", height: "30px", fontSize: "13px" }}
+        >
+          A+
         </div>
-      </footer>
+        <div className="brand-name">Andhra Hospitals</div>
+      </div>
+
+      <div className="foot-links">
+        <a href="#pillars">Platform</a>
+        <a href="#flow">How it works</a>
+        <a href="#">Security</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+
+    {/* Google Map */}
+    <div className="map-container">
+      <iframe
+        title="Andhra Hospital location"
+        src="https://maps.app.goo.gl/VD47BMpYCBoxmgTRA"
+        style={{
+          width: "100%",
+          height: "250px",
+          border: 0,
+          borderRadius: "12px",
+        }}
+      ></iframe>
+    </div>
+
+    <div className="foot-note">
+      Advisory diagnosis support only — all clinical decisions are made and
+      signed off by a licensed physician.
+    </div>
+  </div>
+</footer>
     </div>
   )
 }
