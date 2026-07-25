@@ -1,6 +1,6 @@
 import './App.css'
 
-function UserProfile({ userName, onSignOut, onBackHome }) {
+function UserProfile({ userName, onSignOut, onBackHome, onOpenSymptoms }) {
   return (
     <div className="profile-page">
       <section className="profile-shell">
@@ -72,6 +72,9 @@ function UserProfile({ userName, onSignOut, onBackHome }) {
           </div>
 
           <div className="profile-actions">
+            <button type="button" className="btn btn-secondary" onClick={onOpenSymptoms}>
+              Symptom checker
+            </button>
             <button type="button" className="btn btn-primary" onClick={onBackHome}>
               Go to home
             </button>

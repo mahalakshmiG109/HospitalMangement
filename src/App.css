@@ -266,6 +266,16 @@ nav.links a:hover {
   border-color: var(--teal);
 }
 
+.btn-secondary {
+  background: #f3faf8;
+  color: var(--teal-deep);
+  border-color: transparent;
+}
+
+.btn-secondary:hover {
+  background: #e7f3ef;
+}
+
 .hero {
   position: relative;
   z-index: 1;
@@ -799,18 +809,113 @@ auth-page {
   text-align: center;
 }
 
-.profile-page {
+.profile-page,
+.symptoms-page {
   min-height: 100vh;
   background: radial-gradient(circle at top right, rgba(20, 125, 119, 0.1), transparent 34%),
     linear-gradient(180deg, #f8fbfb 0%, #eff6f7 100%);
 }
 
-.profile-shell {
+.profile-shell,
+.symptoms-shell {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 64px 20px;
+}
+
+.symptoms-card {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(15, 39, 48, 0.08);
+  border-radius: 28px;
+  box-shadow: 0 28px 64px -30px rgba(15, 39, 48, 0.22);
+  padding: 38px;
+  max-width: 860px;
+  width: 100%;
+}
+
+.symptoms-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 34px;
+}
+
+.symptoms-header h1 {
+  font-size: clamp(30px, 3vw, 42px);
+  line-height: 1.05;
+  margin-top: 14px;
+}
+
+.symptoms-form {
+  display: grid;
+  gap: 24px;
+}
+
+.form-row {
+  display: grid;
+  gap: 18px;
+}
+
+.form-row label,
+.gender-fieldset {
+  display: grid;
+  gap: 12px;
+}
+
+.gender-fieldset {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.gender-fieldset legend {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.radio-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: rgba(15, 39, 48, 0.04);
+}
+
+.radio-option input {
+  accent-color: var(--teal-deep);
+}
+
+select,
+textarea {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 14px 16px;
+  font: inherit;
+  background: #fff;
+}
+
+select {
+  min-height: 50px;
+}
+
+.textarea-row textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+}
+
+.required {
+  color: var(--coral);
 }
 
 .profile-card {

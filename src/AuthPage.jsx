@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import { supabase } from './supabaseClient'
 import UserProfile from './UserProfile'
+import SymptomsChecker from './SymptomsChecker'
 
 function AuthPage({ onBackHome }) {
   const [isSignUp, setIsSignUp] = useState(true)
@@ -9,6 +10,7 @@ function AuthPage({ onBackHome }) {
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
   const [loggedInUser, setLoggedInUser] = useState(null)
+  const [showSymptoms, setShowSymptoms] = useState(false)
 
   const handleChange = (event) => {
     const { name, value } = event.target
@@ -87,7 +89,18 @@ function AuthPage({ onBackHome }) {
   }
 
   if (loggedInUser) {
-    return <UserProfile userName={loggedInUser} onSignOut={() => setLoggedInUser(null)} onBackHome={onBackHome} />
+    if (showSymptoms) {
+      return <SymptomsChecker onBack={() => setShowSymptoms(false)} onSignOut={() => setLoggedInUser(null)} />
+    }
+
+    return (
+      <UserProfile
+        userName={loggedInUser}
+        onSignOut={() => setLoggedInUser(null)}
+        onBackHome={onBackHome}
+        onOpenSymptoms={() => setShowSymptoms(true)}
+      />
+    )
   }
 
   return (
