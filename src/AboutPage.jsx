@@ -1,6 +1,7 @@
 import './App.css'
+import { Link } from 'react-router-dom'
 
-function AboutPage({ onBackHome }) {
+function AboutPage() {
   return (
     <div className="about-page">
       <section className="about-hero">
@@ -13,9 +14,9 @@ function AboutPage({ onBackHome }) {
             The system combines patient intake, diagnosis support, bed tracking, and care reference in one place so hospitals can work faster while keeping clinical decisions human-led.
           </p>
           <div className="hero-cta">
-            <button type="button" className="btn btn-primary btn-lg" onClick={onBackHome}>
+            <Link to="/" className="btn btn-primary btn-lg">
               Back to home
-            </button>
+            </Link>
           </div>
         </div>
       </section>
@@ -72,9 +73,9 @@ function AboutPage({ onBackHome }) {
             This project is designed to bring hospital management and diagnosis support into one modern experience while keeping the final medical decision in the hands of licensed professionals.
           </p>
           <div className="hero-cta">
-            <button type="button" className="btn btn-ghost btn-lg" onClick={onBackHome}>
+            <Link to="/" className="btn btn-ghost btn-lg">
               Explore the homepage
-            </button>
+            </Link>
           </div>
         </div>
       </section>

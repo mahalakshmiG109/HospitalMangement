@@ -1,24 +1,13 @@
-import { useState } from 'react'
 import './App.css'
+import { BrowserRouter, Link, Route, Routes, useNavigate } from 'react-router-dom'
 import AboutPage from './AboutPage'
 import AuthPage from './AuthPage'
+import DashboardPage from './DashboardPage'
+import HowItWorksPage from './HowItWorksPage'
+import ProtectedRoute from './ProtectedRoute'
 
-function App() {
-  const [showAbout, setShowAbout] = useState(false)
-  const [showAuth, setShowAuth] = useState(false)
-
-  if (showAbout) {
-    return <AboutPage onBackHome={() => setShowAbout(false)} />
-  }
-
-  if (showAuth) {
-    return <AuthPage onBackHome={() => setShowAuth(false)} />
-  }
-
-  const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
-  const mapUrl = googleMapsApiKey
-    ? `https://www.google.com/maps/embed/v1/place?key=${googleMapsApiKey}&q=Andhra+Hospital,India&zoom=15`
-    : 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3804.536803487593!2d78.47320027463753!3d17.43777794144968!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb9770ef4b0a1d%3A0xa3a62b9fe40db96e!2sAndhra%20Hospital!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin'
+function HomePage() {
+  const navigate = useNavigate()
 
   return (
     <div className="app-shell">
@@ -47,16 +36,17 @@ function App() {
          
           <nav className="links">
             <a href="#pillars">Platform</a>
-            <a href="#flow">How it works</a>
+            <Link to="/how-it-works">How it works</Link>
             <a href="#trust">Trusted by</a>
             <a href="#cta">Pricing</a>
-            <button type="button" className="nav-link-btn" onClick={() => setShowAbout(true)}>
-              About
-            </button>
+            <Link to="/about">About</Link>
           </nav>
           <div className="nav-cta">
-            <button type="button" className="btn btn-ghost" onClick={() => setShowAuth(true)}>
-              Sign in
+            <button type="button" className="btn btn-ghost" onClick={() => navigate('/login')}>
+              Login
+            </button>
+            <button type="button" className="btn btn-secondary" onClick={() => navigate('/signup')}>
+              Sign Up
             </button>
             <a href="#cta" className="btn btn-primary">Request a demo</a>
           </div>
@@ -79,9 +69,9 @@ function App() {
             <a href="#cta" className="btn btn-primary btn-lg">
               Request a demo →
             </a>
-            <a href="#flow" className="btn btn-ghost btn-lg">
+            <Link to="/how-it-works" className="btn btn-ghost btn-lg">
               See how it works
-            </a>
+            </Link>
           </div>
 
           <div className="pulse-strip">
@@ -304,6 +294,29 @@ function App() {
   </div>
 </footer>
     </div>
+  )
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<AuthPage mode="login" />} />
+        <Route path="/signup" element={<AuthPage mode="signup" />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/how-it-works" element={<HowItWorksPage />} />
+        <Route element={<ProtectedRoute allowedRoles={['patient']} />}>
+          <Route path="/patient/dashboard" element={<DashboardPage role="patient" />} />
+        </Route>
+        <Route element={<ProtectedRoute allowedRoles={['doctor']} />}>
+          <Route path="/doctor/dashboard" element={<DashboardPage role="doctor" />} />
+        </Route>
+        <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+          <Route path="/admin/dashboard" element={<DashboardPage role="admin" />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   )
 }
 
