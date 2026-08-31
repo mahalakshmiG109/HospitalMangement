@@ -18,8 +18,12 @@ function ProtectedRoute({ allowedRoles }) {
         if (active) setState({ loading: false, user: null, role: null })
         return
       }
-      const { data } = await supabase.from('profiles').select('role').eq('user_id', session.user.id).single()
-      if (active) setState({ loading: false, user: session.user, role: data?.role || session.user.user_metadata?.role })
+      const { data } = await supabase.from('profiles').select('role').eq('user_id', session.user.id).maybeSingle()
+      const metadataRole = session.user.user_metadata?.role
+      const role = ['patient', 'doctor', 'admin'].includes(data?.role)
+        ? data.role
+        : ['patient', 'doctor', 'admin'].includes(metadataRole) ? metadataRole : 'patient'
+      if (active) setState({ loading: false, user: session.user, role })
     }
     loadSession()
     return () => { active = false }

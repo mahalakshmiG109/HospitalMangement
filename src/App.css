@@ -790,6 +790,10 @@ auth-page {
   background: #fff;
 }
 
+.password-field { position: relative; display: flex; align-items: center; }
+.password-field input { width: 100%; padding-right: 68px; }
+.password-toggle { position: absolute; right: 10px; border: 0; background: none; color: var(--teal-deep); font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; padding: 6px; }
+
 .role-fieldset { border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
 .role-fieldset legend { font-size: 14px; font-weight: 600; padding: 0 5px; }
 .role-options { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 8px; }
@@ -813,6 +817,10 @@ auth-page {
 .dashboard-header p { margin-top: 14px; }
 .dashboard-welcome { display: flex; justify-content: space-between; align-items: center; margin: 48px 0 22px; padding: 24px 28px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); }
 .dashboard-welcome h2 { font-family: 'Space Grotesk'; font-size: 26px; margin: 6px 0; }
+.patient-hero { display: flex; justify-content: space-between; align-items: center; margin: 48px 0 22px; padding: 30px 28px; background: var(--teal-deep); color: #fff; border-radius: var(--radius-lg); box-shadow: 0 20px 40px -28px rgba(11, 79, 75, .65); }
+.patient-hero h2 { font-family: 'Space Grotesk'; font-size: 32px; margin: 6px 0; }
+.patient-hero p { color: rgba(255, 255, 255, .78); }
+.patient-hero .kicker { color: var(--amber-tint); }
 .dashboard-grid { grid-template-columns: repeat(3, 1fr); }
 .dashboard-tile { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 24px; min-height: 180px; box-shadow: 0 16px 35px -28px rgba(15,39,48,.4); }
 .dashboard-tile .tagnum { color: var(--amber); font-family: 'IBM Plex Mono'; font-size: 12px; }
@@ -823,6 +831,7 @@ auth-page {
   .how-steps, .audience-grid, .dashboard-grid { grid-template-columns: 1fr; }
   .dashboard-header { flex-direction: column; }
   .dashboard-header .btn { width: 100%; justify-content: center; }
+  .patient-hero { align-items: flex-start; flex-direction: column; gap: 18px; }
 }
 
 .auth-submit {

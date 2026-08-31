@@ -4,6 +4,8 @@ import AboutPage from './AboutPage'
 import AuthPage from './AuthPage'
 import DashboardPage from './DashboardPage'
 import HowItWorksPage from './HowItWorksPage'
+import PatientDashboard from './PatientDashboard'
+import BedBooking from './BedBooking'
 import ProtectedRoute from './ProtectedRoute'
 
 function HomePage() {
@@ -307,7 +309,8 @@ function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/how-it-works" element={<HowItWorksPage />} />
         <Route element={<ProtectedRoute allowedRoles={['patient']} />}>
-          <Route path="/patient/dashboard" element={<DashboardPage role="patient" />} />
+          <Route path="/patient/dashboard" element={<PatientDashboard />} />
+          <Route path="/patient/bed-booking" element={<BedBooking />} />
         </Route>
         <Route element={<ProtectedRoute allowedRoles={['doctor']} />}>
           <Route path="/doctor/dashboard" element={<DashboardPage role="doctor" />} />
