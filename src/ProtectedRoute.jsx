@@ -20,9 +20,9 @@ function ProtectedRoute({ allowedRoles }) {
       }
       const { data } = await supabase.from('profiles').select('role').eq('user_id', session.user.id).maybeSingle()
       const metadataRole = session.user.user_metadata?.role
-      const role = ['patient', 'doctor', 'admin'].includes(data?.role)
+      const role = ['patient', 'doctor', 'admin', 'pharmacist'].includes(data?.role)
         ? data.role
-        : ['patient', 'doctor', 'admin'].includes(metadataRole) ? metadataRole : 'patient'
+        : ['patient', 'doctor', 'admin', 'pharmacist'].includes(metadataRole) ? metadataRole : 'patient'
       if (active) setState({ loading: false, user: session.user, role })
     }
     loadSession()

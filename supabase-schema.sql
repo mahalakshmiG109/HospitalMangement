@@ -3,14 +3,129 @@ create table if not exists public.profiles (
   full_name text not null,
   email text not null,
   phone text,
-  role text not null default 'patient' check (role in ('patient', 'doctor', 'admin')),
+  role text not null default 'patient' check (role in ('patient', 'doctor', 'admin', 'pharmacist')),
+  specialization text,
+  experience_years integer,
+  availability text,
+  license_number text,
   created_at timestamptz not null default now()
 );
+
+alter table public.profiles add column if not exists specialization text;
+alter table public.profiles add column if not exists experience_years integer;
+alter table public.profiles add column if not exists availability text;
+alter table public.profiles add column if not exists license_number text;
+alter table public.profiles drop constraint if exists profiles_role_check;
+alter table public.profiles add constraint profiles_role_check check (role in ('patient', 'doctor', 'admin', 'pharmacist'));
 
 alter table public.profiles enable row level security;
 create policy "Users can view their own profile" on public.profiles for select using (auth.uid() = user_id);
 create policy "Users can insert their own profile" on public.profiles for insert with check (auth.uid() = user_id);
 create policy "Users can update their own profile" on public.profiles for update using (auth.uid() = user_id);
+
+create or replace function public.has_role(required_role text)
+returns boolean language sql stable security definer set search_path = public as $$
+  select exists (select 1 from public.profiles where user_id = auth.uid() and role = required_role);
+$$;
+
+create or replace function public.is_doctor(profile_id uuid)
+returns boolean language sql stable security definer set search_path = public as $$
+  select exists (select 1 from public.profiles where user_id = profile_id and role = 'doctor');
+$$;
+
+create policy "Patients can view doctor profiles" on public.profiles for select using (
+  role = 'doctor' and auth.uid() is not null
+);
+create policy "Staff can view profiles" on public.profiles for select using (
+  public.has_role('doctor') or public.has_role('admin') or public.has_role('pharmacist')
+);
+
+-- Appointment scheduling
+create table if not exists public.appointments (
+  id uuid primary key default gen_random_uuid(),
+  patient_id uuid not null references auth.users(id) on delete cascade,
+  doctor_id uuid not null references auth.users(id) on delete cascade,
+  appointment_date date not null,
+  appointment_time time not null,
+  reason text,
+  notes text,
+  status text not null default 'Pending' check (status in ('Pending', 'Confirmed', 'Completed', 'Cancelled')),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (doctor_id, appointment_date, appointment_time)
+);
+
+alter table public.appointments enable row level security;
+create policy "Patients view their appointments" on public.appointments for select using (patient_id = auth.uid());
+create policy "Doctors view their appointments" on public.appointments for select using (doctor_id = auth.uid());
+create policy "Admins view all appointments" on public.appointments for select using (public.has_role('admin'));
+create policy "Patients create appointments" on public.appointments for insert with check (patient_id = auth.uid() and public.is_doctor(doctor_id));
+create policy "Staff manage appointments" on public.appointments for update using (doctor_id = auth.uid() or public.has_role('admin'));
+create policy "Patients cancel appointments" on public.appointments for update using (patient_id = auth.uid());
+
+-- Pharmacy inventory and prescription workflow
+create table if not exists public.medicines (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  category text not null,
+  quantity integer not null default 0 check (quantity >= 0),
+  low_stock_threshold integer not null default 10 check (low_stock_threshold >= 0),
+  price numeric(10,2) not null default 0 check (price >= 0),
+  expiry_date date not null,
+  manufacturer text,
+  batch_number text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.medicines enable row level security;
+create policy "Authenticated users view medicines" on public.medicines for select using (auth.uid() is not null);
+create policy "Pharmacy staff manage medicines" on public.medicines for all using (public.has_role('admin') or public.has_role('pharmacist'));
+
+create table if not exists public.prescriptions (
+  id uuid primary key default gen_random_uuid(),
+  patient_id uuid not null references auth.users(id) on delete cascade,
+  doctor_id uuid not null references auth.users(id) on delete cascade,
+  medicine_id uuid not null references public.medicines(id) on delete restrict,
+  dosage text not null,
+  frequency text not null,
+  duration text not null,
+  instructions text,
+  status text not null default 'Prescribed' check (status in ('Prescribed', 'Dispensed', 'Cancelled')),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.prescriptions enable row level security;
+create policy "Patients view their prescriptions" on public.prescriptions for select using (patient_id = auth.uid());
+create policy "Doctors view prescriptions" on public.prescriptions for select using (doctor_id = auth.uid());
+create policy "Doctors create prescriptions" on public.prescriptions for insert with check (doctor_id = auth.uid() and public.has_role('doctor'));
+create policy "Pharmacy staff manage prescriptions" on public.prescriptions for all using (public.has_role('admin') or public.has_role('pharmacist'));
+
+create or replace function public.dispense_prescription(prescription_id uuid)
+returns void language plpgsql security definer set search_path = public as $$
+declare
+  selected_prescription public.prescriptions%rowtype;
+begin
+  if not (public.has_role('admin') or public.has_role('pharmacist')) then
+    raise exception 'Only pharmacy staff can dispense prescriptions';
+  end if;
+
+  select * into selected_prescription from public.prescriptions where id = prescription_id for update;
+  if selected_prescription.id is null or selected_prescription.status <> 'Prescribed' then
+    raise exception 'Prescription is unavailable for dispensing';
+  end if;
+
+  update public.medicines
+  set quantity = quantity - 1, updated_at = now()
+  where id = selected_prescription.medicine_id and quantity > 0 and expiry_date >= current_date;
+  if not found then
+    raise exception 'Medicine is out of stock or expired';
+  end if;
+
+  update public.prescriptions set status = 'Dispensed', updated_at = now() where id = prescription_id;
+end;
+$$;
 
 create or replace function public.handle_new_user()
 returns trigger language plpgsql security definer set search_path = public as $$

@@ -10,12 +10,12 @@ const patientActions = [
   ['04', 'Symptom checker', 'Record symptoms before speaking with your care team.'],
   ['05', 'Care team', 'View doctors and services available at Andhra Hospitals.'],
   ['06', 'Notifications', 'Stay informed about appointments and care updates.'],
+  ['07', 'Pharmacy', 'View medicines and prescriptions connected to your care.'],
 ]
 
 function BedAvailabilityView() {
   const navigate = useNavigate()
   const [beds, setBeds] = useState([])
-  const [wards, setWards] = useState([])
   const [stats, setStats] = useState({ total: 0, available: 0, occupied: 0, reserved: 0, maintenance: 0 })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -34,11 +34,7 @@ function BedAvailabilityView() {
       const { data: bedsData, error: bedsError } = await supabase.from('beds').select('*, wards(id, name, floor)')
       if (bedsError) throw bedsError
 
-      const { data: wardsData, error: wardsError } = await supabase.from('wards').select('*').order('floor')
-      if (wardsError) throw wardsError
-
       setBeds(bedsData || [])
-      setWards(wardsData || [])
 
       if (bedsData) {
         const statusCounts = {
@@ -237,7 +233,7 @@ function PatientDashboard() {
               <span className="tagnum">{number}</span>
               <h3>{title}</h3>
               <p>{description}</p>
-              <button className="tile-action" type="button">
+              <button className="tile-action" type="button" onClick={() => title === 'Book an appointment' || title === 'My appointments' ? navigate('/patient/appointments') : title === 'Pharmacy' ? navigate('/patient/pharmacy') : undefined}>
                 Open view <span aria-hidden="true">-&gt;</span>
               </button>
             </article>

@@ -247,7 +247,7 @@ nav.links a:hover {
 
 .btn-primary {
   background: var(--teal-deep);
-  color: #fff;
+  color: #0b4f4b;
   box-shadow: 0 10px 24px -10px rgba(11, 79, 75, 0.55);
 }
 
@@ -267,13 +267,13 @@ nav.links a:hover {
 }
 
 .btn-secondary {
-  background: #f3faf8;
+  background: #025b46;
   color: var(--teal-deep);
   border-color: transparent;
 }
 
 .btn-secondary:hover {
-  background: #e7f3ef;
+  background: #035439;
 }
 
 .hero {
@@ -751,7 +751,7 @@ auth-page {
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   padding: 36px;
-  box-shadow: 0 20px 48px -28px rgba(15, 39, 48, 0.25);
+  box-shadow: 0 20px 48px -28px rgba(8, 107, 71, 0.25);
   max-width: 520px;
   width: 100%;
 }

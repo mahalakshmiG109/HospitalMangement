@@ -36,9 +36,9 @@ function AuthPage({ mode = 'login' }) {
         if (error) throw new Error('We could not sign you in. Check your email and password and try again.')
         const { data: profile } = await supabase.from('profiles').select('role').eq('user_id', data.user.id).maybeSingle()
         const metadataRole = data.user.user_metadata?.role
-        const role = ['patient', 'doctor', 'admin'].includes(profile?.role)
+        const role = ['patient', 'doctor', 'admin', 'pharmacist'].includes(profile?.role)
           ? profile.role
-          : ['patient', 'doctor', 'admin'].includes(metadataRole) ? metadataRole : 'patient'
+          : ['patient', 'doctor', 'admin', 'pharmacist'].includes(metadataRole) ? metadataRole : 'patient'
         navigate(`/${role}/dashboard`, { replace: true })
       }
     } catch (authError) { showError(authError.message || 'We could not sign you in. Please try again.') } finally { setLoading(false) }

@@ -7,6 +7,8 @@ import HowItWorksPage from './HowItWorksPage'
 import PatientDashboard from './PatientDashboard'
 import BedBooking from './BedBooking'
 import ProtectedRoute from './ProtectedRoute'
+import AppointmentPage from './AppointmentPage'
+import PharmacyPage from './PharmacyPage'
 
 function HomePage() {
   const navigate = useNavigate()
@@ -50,7 +52,7 @@ function HomePage() {
             <button type="button" className="btn btn-secondary" onClick={() => navigate('/signup')}>
               Sign Up
             </button>
-            <a href="#cta" className="btn btn-primary">Request a demo</a>
+           
           </div>
         </div>
       </header>
@@ -68,9 +70,7 @@ function HomePage() {
             prediction, real-time bed availability, and secure patient management.
           </p>
           <div className="hero-cta">
-            <a href="#cta" className="btn btn-primary btn-lg">
-              Request a demo →
-            </a>
+           
             <Link to="/how-it-works" className="btn btn-ghost btn-lg">
               See how it works
             </Link>
@@ -243,9 +243,7 @@ function HomePage() {
               diagnosis.
             </p>
             <div className="hero-cta">
-              <a href="#" className="btn btn-primary btn-lg">
-                Request a demo →
-              </a>
+             
               <a href="#" className="btn btn-ghost btn-lg">
                 Talk to sales
               </a>
@@ -311,12 +309,22 @@ function App() {
         <Route element={<ProtectedRoute allowedRoles={['patient']} />}>
           <Route path="/patient/dashboard" element={<PatientDashboard />} />
           <Route path="/patient/bed-booking" element={<BedBooking />} />
+          <Route path="/patient/appointments" element={<AppointmentPage />} />
+          <Route path="/patient/pharmacy" element={<PharmacyPage />} />
         </Route>
         <Route element={<ProtectedRoute allowedRoles={['doctor']} />}>
           <Route path="/doctor/dashboard" element={<DashboardPage role="doctor" />} />
+          <Route path="/doctor/appointments" element={<AppointmentPage />} />
+          <Route path="/doctor/pharmacy" element={<PharmacyPage />} />
         </Route>
         <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
           <Route path="/admin/dashboard" element={<DashboardPage role="admin" />} />
+          <Route path="/admin/appointments" element={<AppointmentPage />} />
+          <Route path="/admin/pharmacy" element={<PharmacyPage />} />
+        </Route>
+        <Route element={<ProtectedRoute allowedRoles={['pharmacist']} />}>
+          <Route path="/pharmacist/dashboard" element={<DashboardPage role="pharmacist" />} />
+          <Route path="/pharmacist/pharmacy" element={<PharmacyPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

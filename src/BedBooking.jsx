@@ -6,7 +6,7 @@ import './BedBooking.css'
 function BedBooking() {
   const navigate = useNavigate()
   const location = useLocation()
-  const [selectedBed, setSelectedBed] = useState(location.state?.bed || null)
+  const [selectedBed] = useState(location.state?.bed || null)
   const [beds, setBeds] = useState([])
   const [wards, setWards] = useState([])
   const [loading, setLoading] = useState(true)
@@ -18,10 +18,6 @@ function BedBooking() {
   })
   const [bookingStatus, setBookingStatus] = useState(null)
   const [filterWard, setFilterWard] = useState('all')
-
-  useEffect(() => {
-    fetchData()
-  }, [])
 
   async function fetchData() {
     try {
@@ -44,6 +40,11 @@ function BedBooking() {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    const timer = setTimeout(fetchData, 0)
+    return () => clearTimeout(timer)
+  }, [])
 
   function getFilteredBeds() {
     if (filterWard === 'all') return beds
