@@ -78,6 +78,8 @@ create table if not exists public.medicines (
   updated_at timestamptz not null default now()
 );
 
+alter table public.medicines add column if not exists description text;
+
 alter table public.medicines enable row level security;
 create policy "Authenticated users view medicines" on public.medicines for select using (auth.uid() is not null);
 create policy "Pharmacy staff manage medicines" on public.medicines for all using (public.has_role('admin') or public.has_role('pharmacist'));
@@ -101,6 +103,69 @@ create policy "Patients view their prescriptions" on public.prescriptions for se
 create policy "Doctors view prescriptions" on public.prescriptions for select using (doctor_id = auth.uid());
 create policy "Doctors create prescriptions" on public.prescriptions for insert with check (doctor_id = auth.uid() and public.has_role('doctor'));
 create policy "Pharmacy staff manage prescriptions" on public.prescriptions for all using (public.has_role('admin') or public.has_role('pharmacist'));
+
+-- Patient pharmacy orders
+create table if not exists public.pharmacy_orders (
+  id uuid primary key default gen_random_uuid(),
+  patient_id uuid not null references auth.users(id) on delete cascade,
+  total_amount numeric(10,2) not null default 0 check (total_amount >= 0),
+  status text not null default 'Pending' check (status in ('Pending', 'Processing', 'Ready', 'Completed', 'Cancelled')),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.pharmacy_order_items (
+  id uuid primary key default gen_random_uuid(),
+  order_id uuid not null references public.pharmacy_orders(id) on delete cascade,
+  medicine_id uuid not null references public.medicines(id) on delete restrict,
+  quantity integer not null check (quantity > 0),
+  unit_price numeric(10,2) not null check (unit_price >= 0)
+);
+
+alter table public.pharmacy_orders enable row level security;
+alter table public.pharmacy_order_items enable row level security;
+create policy "Patients view their pharmacy orders" on public.pharmacy_orders for select using (patient_id = auth.uid());
+create policy "Patients view their pharmacy order items" on public.pharmacy_order_items for select using (
+  exists (select 1 from public.pharmacy_orders where id = order_id and patient_id = auth.uid())
+);
+create policy "Pharmacy staff manage orders" on public.pharmacy_orders for all using (public.has_role('admin') or public.has_role('pharmacist'));
+create policy "Pharmacy staff manage order items" on public.pharmacy_order_items for all using (public.has_role('admin') or public.has_role('pharmacist'));
+
+create or replace function public.place_pharmacy_order(order_items jsonb)
+returns uuid language plpgsql security definer set search_path = public as $$
+declare
+  new_order_id uuid;
+  item jsonb;
+  selected_medicine public.medicines%rowtype;
+  requested_quantity integer;
+  order_total numeric(10,2) := 0;
+begin
+  if auth.uid() is null or jsonb_typeof(order_items) <> 'array' or jsonb_array_length(order_items) = 0 then
+    raise exception 'A signed-in patient and at least one medicine are required';
+  end if;
+
+  insert into public.pharmacy_orders (patient_id) values (auth.uid()) returning id into new_order_id;
+  for item in select * from jsonb_array_elements(order_items) loop
+    requested_quantity := (item->>'quantity')::integer;
+    select * into selected_medicine from public.medicines where id = (item->>'medicine_id')::uuid for update;
+    if selected_medicine.id is null or selected_medicine.expiry_date < current_date or requested_quantity < 1 then
+      raise exception 'Medicine is unavailable';
+    end if;
+    if selected_medicine.quantity < requested_quantity then
+      raise exception 'Insufficient stock for %', selected_medicine.name;
+    end if;
+    update public.medicines set quantity = quantity - requested_quantity, updated_at = now() where id = selected_medicine.id;
+    insert into public.pharmacy_order_items (order_id, medicine_id, quantity, unit_price)
+      values (new_order_id, selected_medicine.id, requested_quantity, selected_medicine.price);
+    order_total := order_total + (selected_medicine.price * requested_quantity);
+  end loop;
+  update public.pharmacy_orders set total_amount = order_total, updated_at = now() where id = new_order_id;
+  return new_order_id;
+exception when others then
+  if new_order_id is not null then delete from public.pharmacy_orders where id = new_order_id; end if;
+  raise;
+end;
+$$;
 
 create or replace function public.dispense_prescription(prescription_id uuid)
 returns void language plpgsql security definer set search_path = public as $$
