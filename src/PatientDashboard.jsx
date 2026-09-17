@@ -8,8 +8,6 @@ const patientActions = [
   ['02', 'My appointments', 'See upcoming visits and your appointment history.'],
   ['03', 'Medical records', 'Keep your reports and care history in one place.'],
   ['04', 'Symptom checker', 'Record symptoms before speaking with your care team.'],
-  ['05', 'Care team', 'View doctors and services available at Andhra Hospitals.'],
-  ['06', 'Notifications', 'Stay informed about appointments and care updates.'],
   ['07', 'Pharmacy', 'View medicines and prescriptions connected to your care.'],
 ]
 
@@ -233,7 +231,7 @@ function PatientDashboard() {
               <span className="tagnum">{number}</span>
               <h3>{title}</h3>
               <p>{description}</p>
-              <button className="tile-action" type="button" onClick={() => title === 'Book an appointment' || title === 'My appointments' ? navigate('/patient/appointments') : title === 'Pharmacy' ? navigate('/patient/pharmacy') : undefined}>
+              <button className="tile-action" type="button" onClick={() => title === 'Book an appointment' || title === 'My appointments' ? navigate('/patient/appointments') : title === 'Pharmacy' ? navigate('/patient/pharmacy') : title === 'Symptom checker' ? navigate('/patient/symptom-checker') : undefined}>
                 Open view <span aria-hidden="true">-&gt;</span>
               </button>
             </article>

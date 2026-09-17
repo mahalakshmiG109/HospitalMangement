@@ -925,6 +925,216 @@ auth-page {
   gap: 24px;
 }
 
+.symptom-picker,
+.red-flag-fieldset {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 20px;
+  background: rgba(15, 39, 48, 0.025);
+}
+
+.symptom-picker legend,
+.red-flag-fieldset legend {
+  padding: 0 6px;
+  font-weight: 700;
+}
+
+.symptom-options,
+.red-flag-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.symptom-option,
+.red-flag-options label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 48px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.symptom-option.selected {
+  border-color: var(--teal);
+  background: var(--teal-tint);
+  color: var(--teal-deep);
+}
+
+.symptom-option input,
+.red-flag-options input {
+  accent-color: var(--teal);
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+}
+
+.checker-details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.checker-details-grid label,
+.wide-field {
+  display: grid;
+  gap: 10px;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.checker-details-grid input,
+.checker-details-grid select,
+.wide-field textarea {
+  width: 100%;
+}
+
+.wide-field textarea {
+  min-height: 92px;
+}
+
+.red-flag-fieldset p {
+  margin-top: 4px;
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.red-flag-options {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.red-flag-options label {
+  align-items: flex-start;
+}
+
+.checker-results {
+  display: grid;
+  gap: 24px;
+}
+
+.result-heading h2,
+.urgent-result h2 {
+  margin-top: 10px;
+  color: var(--teal-deep);
+  font-size: clamp(26px, 3vw, 36px);
+}
+
+.result-heading p,
+.urgent-result p {
+  margin-top: 10px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+
+.condition-list {
+  display: grid;
+  gap: 16px;
+}
+
+.condition-result {
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--teal);
+  border-radius: 16px;
+  background: var(--surface);
+}
+
+.condition-result h3,
+.no-result h3 {
+  color: var(--teal-deep);
+  font-size: 20px;
+}
+
+.condition-result > div > p,
+.result-columns p,
+.result-columns li,
+.no-result p {
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.condition-result > div > p {
+  margin-top: 6px;
+}
+
+.result-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.result-columns strong {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--ink);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.result-columns ul {
+  padding-left: 18px;
+}
+
+.safety-note {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 9px;
+  background: var(--amber-tint);
+  color: #81521b !important;
+}
+
+.urgent-result,
+.no-result {
+  padding: 26px;
+  border-radius: 18px;
+  border: 1px solid rgba(214, 90, 70, 0.25);
+  background: rgba(214, 90, 70, 0.07);
+}
+
+.urgent-result h2 {
+  color: #a63e30;
+}
+
+.urgent-result .btn {
+  margin-top: 20px;
+}
+
+.result-label {
+  color: #a63e30;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.result-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.medical-disclaimer {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--ink-soft);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
 .form-row {
   display: grid;
   gap: 18px;
@@ -1261,6 +1471,41 @@ select {
 
   .profile-actions {
     flex-direction: column;
+  }
+
+  .symptoms-shell {
+    padding: 36px 16px;
+  }
+
+  .symptoms-card {
+    padding: 26px 18px;
+    border-radius: 22px;
+  }
+
+  .symptoms-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .symptoms-header .profile-signout {
+    width: 100%;
+  }
+
+  .symptom-options,
+  .red-flag-options,
+  .checker-details-grid,
+  .result-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions,
+  .result-actions {
+    flex-direction: column-reverse;
+  }
+
+  .form-actions .btn,
+  .result-actions .btn {
+    width: 100%;
   }
 }
 

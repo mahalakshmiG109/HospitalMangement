@@ -55,7 +55,30 @@ create table if not exists public.appointments (
   unique (doctor_id, appointment_date, appointment_time)
 );
 
+-- Keep existing installations compatible with the appointment workflow.
+alter table public.appointments add column if not exists patient_id uuid;
+alter table public.appointments add column if not exists doctor_id uuid;
+alter table public.appointments add column if not exists appointment_date date;
+alter table public.appointments add column if not exists appointment_time time;
+alter table public.appointments add column if not exists reason text;
+alter table public.appointments add column if not exists notes text;
+alter table public.appointments add column if not exists status text default 'Pending';
+alter table public.appointments add column if not exists created_at timestamptz not null default now();
+alter table public.appointments add column if not exists updated_at timestamptz not null default now();
+alter table public.appointments alter column status set default 'Pending';
+update public.appointments set status = 'Pending' where status is null or status not in ('Pending', 'Confirmed', 'Completed', 'Cancelled');
+alter table public.appointments alter column status set not null;
+alter table public.appointments drop constraint if exists appointments_status_check;
+alter table public.appointments add constraint appointments_status_check check (status in ('Pending', 'Confirmed', 'Completed', 'Cancelled'));
+create unique index if not exists appointments_doctor_slot_key on public.appointments (doctor_id, appointment_date, appointment_time);
+
 alter table public.appointments enable row level security;
+drop policy if exists "Patients view their appointments" on public.appointments;
+drop policy if exists "Doctors view their appointments" on public.appointments;
+drop policy if exists "Admins view all appointments" on public.appointments;
+drop policy if exists "Patients create appointments" on public.appointments;
+drop policy if exists "Staff manage appointments" on public.appointments;
+drop policy if exists "Patients cancel appointments" on public.appointments;
 create policy "Patients view their appointments" on public.appointments for select using (patient_id = auth.uid());
 create policy "Doctors view their appointments" on public.appointments for select using (doctor_id = auth.uid());
 create policy "Admins view all appointments" on public.appointments for select using (public.has_role('admin'));

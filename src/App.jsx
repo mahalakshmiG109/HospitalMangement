@@ -9,6 +9,7 @@ import BedBooking from './BedBooking'
 import ProtectedRoute from './ProtectedRoute'
 import AppointmentPage from './AppointmentPage'
 import PharmacyPage from './PharmacyPage'
+import SymptomsChecker from './SymptomsChecker'
 
 function HomePage() {
   const navigate = useNavigate()
@@ -30,9 +31,9 @@ function HomePage() {
       <header>
         <div className="wrap nav-row">
           <div className="brand">
-            <div className="brand-mark">A+</div>
+            <div className="brand-mark">CH</div>
             <div>
-              <div className="brand-name">Andhra Hospitals
+              <div className="brand-name"> CARE HUB
               </div>
               <div className="brand-sub">Management &amp; Diagnosis System</div>
             </div>
@@ -60,7 +61,7 @@ function HomePage() {
       <main>
         <div className="hero wrap">
           <span className="eyebrow">
-             <div className="site-title">Andhra Hospitals</div>
+             <div className="site-title">CARE HUB</div>
           </span>
           <h1>
             HOSPITAL MANAGEMENT AND <span className="accent">DIAGNOSIS</span> SYSTEM
@@ -311,6 +312,7 @@ function App() {
           <Route path="/patient/bed-booking" element={<BedBooking />} />
           <Route path="/patient/appointments" element={<AppointmentPage />} />
           <Route path="/patient/pharmacy" element={<PharmacyPage />} />
+          <Route path="/patient/symptom-checker" element={<SymptomsChecker />} />
         </Route>
         <Route element={<ProtectedRoute allowedRoles={['doctor']} />}>
           <Route path="/doctor/dashboard" element={<DashboardPage role="doctor" />} />
